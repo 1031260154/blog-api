@@ -8,7 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule)
 
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
     credentials: true,
   })
 
@@ -27,12 +27,13 @@ async function bootstrap() {
     .addBearerAuth()
     .build()
 
-  const documentFactory = () => SwaggerModule.createDocument(app, config)
-  SwaggerModule.setup('docs', app, documentFactory)
+  const document = SwaggerModule.createDocument(app, config)
+  SwaggerModule.setup('docs', app, document)
 
   const prismaService = app.get(PrismaService)
   await prismaService.enableShutdownHooks(app)
 
   await app.listen(process.env.PORT ? Number(process.env.PORT) : 3001)
 }
+
 bootstrap()
