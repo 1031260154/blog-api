@@ -51,7 +51,7 @@ export class UploadController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './uploads',
+        destination: '/app/uploads',
         filename: createFilename,
       }),
     }),
